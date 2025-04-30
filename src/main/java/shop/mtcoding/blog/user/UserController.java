@@ -49,16 +49,8 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors) {
-//        boolean r1 = Pattern.matches("^[a-zA-Z0-9]{2,20}$", joinDTO.getUsername());
-//        boolean r2 = Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{6,20}$", joinDTO.getPassword());
-//        boolean r3 = Pattern.matches("^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$", joinDTO.getEmail());
-//
-//        if (!r1) throw new Exception400("유저네임은 2-20자이며, 특수문자,한글이 포함될 수 없습니다");
-//        if (!r2) throw new Exception400("패스워드는 4-20자이며, 특수문자,영어 대문자,소문자, 숫자가 포함되어야 하며, 공백이 있을 수 없습니다");
-//        if (!r3) throw new Exception400("이메일 형식에 맞게 적어주세요");
-
-        userService.회원가입(joinDTO);
+    public String join(@Valid UserRequest.JoinDTO reqDTO, Errors errors) {
+        UserResponse.DTO respDTO = userService.회원가입(reqDTO);
         return "redirect:/login-form";
     }
 

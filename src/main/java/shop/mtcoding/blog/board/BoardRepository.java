@@ -105,7 +105,8 @@ public class BoardRepository {
 //        return query.getResultList();
 //    }
 
-    public void save(Board board) {
+    public Board save(Board board) {
         em.persist(board);
+        return board;
     }
 }

@@ -69,9 +69,9 @@ public class BoardController {
     }
 
     @PostMapping("/board/save")
-    public String save(@Valid BoardRequest.SaveDTO saveDTO, Errors errors) {
+    public String save(@Valid BoardRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardService.글쓰기(saveDTO, sessionUser);
+        BoardResponse.DTO respDTO = boardService.글쓰기(reqDTO, sessionUser);
         return "redirect:/";
     }
 

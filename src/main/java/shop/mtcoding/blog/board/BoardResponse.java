@@ -2,6 +2,7 @@ package shop.mtcoding.blog.board;
 
 import lombok.Data;
 import shop.mtcoding.blog.reply.Reply;
+import shop.mtcoding.blog.user.User;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -9,8 +10,28 @@ import java.util.List;
 
 public class BoardResponse {
 
+    // Board와 똑같이 생긴 DTO
     @Data
     public static class DTO {
+        private Integer id;
+        private String title;
+        private String content;
+        private Boolean isPublic;
+        private Integer userId;
+        private String createdAt;
+
+        public DTO(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.isPublic = board.getIsPublic();
+            this.userId = board.getUser().getId();
+            this.createdAt = board.getCreatedAt().toString();
+        }
+    }
+
+    @Data
+    public static class ListDTO {
         private List<Board> boards;
         private Integer prev;
         private Integer next;
@@ -23,7 +44,7 @@ public class BoardResponse {
         private List<Integer> numbers; // 20개 [1,2,3,4,5,6,7] -> model.numbers -> {{.}}
         private String keyword;
 
-        public DTO(List<Board> boards, Integer current, Integer totalCount, String keyword) {
+        public ListDTO(List<Board> boards, Integer current, Integer totalCount, String keyword) {
             this.boards = boards;
             this.prev = current - 1;
             this.next = current + 1;
