@@ -1,0 +1,45 @@
+{{> layout/header}}
+
+<div class="container p-5">
+
+    <div class="mb-3 d-flex justify-content-end">
+        <form action="/" class="d-flex" method="get">
+            <input class="form-control me-2" type="text" placeholder="검색..." name="keyword">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+
+    {{#model.boards}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title mb-3">{{title}}</h4>
+                    {{^isPublic}}
+                        <div>
+                            <span class="badge bg-secondary">비공개</span>
+                        </div>
+                    {{/isPublic}}
+                </div>
+                <a href="/board/{{id}}" class="btn btn-primary">상세보기</a>
+            </div>
+        </div>
+    {{/model.boards}}
+
+
+    <ul class="pagination d-flex justify-content-center">
+        <li class="page-item {{#model.isFirst}}disabled{{/model.isFirst}}">
+            <a class="page-link" href="?page={{model.prev}}&keyword={{model.keyword}}">Previous</a>
+        </li>
+
+        {{#model.numbers}}
+            <li class="page-item"><a class="page-link" href="?page={{.}}&keyword={{model.keyword}}">{{.}}</a></li>
+        {{/model.numbers}}
+
+        <li class="page-item {{#model.isLast}}disabled{{/model.isLast}}">
+            <a class="page-link" href="?page={{model.next}}&keyword={{model.keyword}}">Next</a>
+        </li>
+    </ul>
+
+</div>
+
+{{> layout/footer}}
