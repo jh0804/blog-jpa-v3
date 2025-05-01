@@ -25,7 +25,7 @@ public class ReplyController {
     @PostMapping("/reply/save")
     public String save(@Valid ReplyRequest.SaveDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        replyService.댓글쓰기(reqDTO, sessionUser);
+        ReplyResponse.DTO respDTO = replyService.댓글쓰기(reqDTO, sessionUser);
         return "redirect:/board/" + reqDTO.getBoardId();
     }
 }

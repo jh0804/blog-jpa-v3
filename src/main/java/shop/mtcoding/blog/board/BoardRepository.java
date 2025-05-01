@@ -109,4 +109,10 @@ public class BoardRepository {
         em.persist(board);
         return board;
     }
+
+    public void deleteById(Integer id) {
+        em.createQuery("delete from Board b where b.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+    }
 }
