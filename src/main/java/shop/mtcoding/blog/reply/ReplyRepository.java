@@ -6,14 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
 public class ReplyRepository {
     private final EntityManager em;
 
-    public Reply findById(Integer id) {
-        return em.find(Reply.class, id);
+    public Optional<Reply> findById(Integer id) {
+        return Optional.ofNullable(em.find(Reply.class, id));
     }
 
     public List<Reply> findAllByBoardId(int boardId) {

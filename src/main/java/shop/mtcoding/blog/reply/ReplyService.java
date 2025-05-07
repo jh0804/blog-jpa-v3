@@ -18,22 +18,15 @@ public class ReplyService {
         return new ReplyResponse.DTO(replyPS);
     }
 
+    // 규칙5 : delete는 응답할 데이터가 없다.
     // TODO : 2단계 RestAPI 주소 변경 json 돌려주기할 때 void 변경하기
     @Transactional
-    public Integer 댓글삭제(Integer id, Integer sessionUserId) {
-        Reply replyPS = replyRepository.findById(id);
-
-        // Exception404
-        if (replyPS == null) throw new Exception404("자원을 찾을 수 없습니다");
+    public void 댓글삭제(Integer id, Integer sessionUserId) {
+        Reply replyPS = replyRepository.findById(id)
+                .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
 
         if (!replyPS.getUser().getId().equals(sessionUserId)) {
             throw new Exception403("권한이 없습니다");
         }
-
-        int boardId = replyPS.getBoard().getId();
-
-        replyRepository.deleteById(id);
-
-        return boardId;
     }
 }
