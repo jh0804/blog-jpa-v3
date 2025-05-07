@@ -20,7 +20,7 @@ public class UserController {
     private final HttpSession session;
 
 
-    @PutMapping("/user")
+    @PutMapping("/s/api/user")
     public String update(@Valid @RequestBody UserRequest.UpdateDTO updateDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         // TODO : JWT 이후에
