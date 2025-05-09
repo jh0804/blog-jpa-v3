@@ -43,22 +43,9 @@ public class UserController {
 
     // TODO : JWT 이후에
     @PostMapping("/login")
-    public String login(@Valid @RequestBody UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
-        //System.out.println(loginDTO);
-        User sessionUser = userService.로그인(loginDTO);
-        session.setAttribute("sessionUser", sessionUser);
-
-        if (loginDTO.getRememberMe() == null) {
-            Cookie cookie = new Cookie("username", null);
-            cookie.setMaxAge(0); // 즉시 만료
-            response.addCookie(cookie);
-        } else {
-            Cookie cookie = new Cookie("username", loginDTO.getUsername());
-            cookie.setMaxAge(60 * 60 * 24 * 7);
-            response.addCookie(cookie);
-        }
-
-        return "redirect:/";
+    public @ResponseBody Resp<?> login(@Valid @RequestBody UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
+        UserResponse.TokenDTO respDTO = userService.로그인(loginDTO); // stateless 서버가 될 거니까 session에 안담는다
+        return Resp.ok(respDTO);
     }
 
     // TODO : JWT 이후에

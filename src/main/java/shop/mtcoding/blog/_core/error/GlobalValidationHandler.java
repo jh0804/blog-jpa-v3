@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import shop.mtcoding.blog._core.error.ex.Exception400;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi400;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class GlobalValidationHandler {
                     List<FieldError> fErrors = errors.getFieldErrors();
 
                     for (FieldError fieldError : fErrors) {
-                        throw new Exception400(fieldError.getField() + ":" + fieldError.getDefaultMessage());
+                        throw new ExceptionApi400(fieldError.getField() + ":" + fieldError.getDefaultMessage());
                     }
                 }
             }

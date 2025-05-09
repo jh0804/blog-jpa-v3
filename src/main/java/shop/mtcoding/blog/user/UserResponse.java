@@ -1,10 +1,21 @@
 package shop.mtcoding.blog.user;
 
+import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
-
 public class UserResponse {
+
+    @Data
+    public static class TokenDTO {
+        private String accessToken;
+        private String refreshToken;
+
+        @Builder
+        public TokenDTO(String accessToken, String refreshToken) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+        }
+    }
 
     // 기본이 되는 model과 똑같이 생긴 DTO
     // pw와 같은 보안에 민감한 데이터는 담지X

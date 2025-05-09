@@ -3,8 +3,8 @@ package shop.mtcoding.blog.reply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.mtcoding.blog._core.error.ex.Exception403;
-import shop.mtcoding.blog._core.error.ex.Exception404;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi403;
+import shop.mtcoding.blog._core.error.ex.ExceptionApi404;
 import shop.mtcoding.blog.user.User;
 
 @RequiredArgsConstructor
@@ -23,10 +23,10 @@ public class ReplyService {
     @Transactional
     public void 댓글삭제(Integer id, Integer sessionUserId) {
         Reply replyPS = replyRepository.findById(id)
-                .orElseThrow(() -> new Exception404("자원을 찾을 수 없습니다"));
+                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
         if (!replyPS.getUser().getId().equals(sessionUserId)) {
-            throw new Exception403("권한이 없습니다");
+            throw new ExceptionApi403("권한이 없습니다");
         }
     }
 }
