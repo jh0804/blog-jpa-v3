@@ -45,8 +45,11 @@ public class UserService {
 
         // 토큰 생성
         String accessToken = JwtUtil.create(userPS);
+        String refreshToken = JwtUtil.createRefresh(userPS);
 
-        return UserResponse.TokenDTO.builder().accessToken(accessToken).build();
+        // DB에 Device 서명값(LoginDTO), IP(request), User-Agent(request), RefreshToken 저장(로그인할때 dto에서 하나를 더 받아야 됨)
+
+        return UserResponse.TokenDTO.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
 
     public Map<String, Object> 유저네임중복체크(String username) {

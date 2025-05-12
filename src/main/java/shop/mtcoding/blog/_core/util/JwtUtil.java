@@ -8,6 +8,16 @@ import shop.mtcoding.blog.user.User;
 import java.util.Date;
 
 public class JwtUtil {
+    public static String createRefresh(User user) {
+        String jwt = JWT.create()
+                .withSubject("blog")
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 일주일
+                .withClaim("id", user.getId())
+                .withClaim("username", user.getUsername())
+                .sign(Algorithm.HMAC512("metacoding"));
+        return jwt;
+    }
+
     public static String create(User user) {
         String jwt = JWT.create()
                 .withSubject("blog")
