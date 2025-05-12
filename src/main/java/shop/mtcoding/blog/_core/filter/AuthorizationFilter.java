@@ -32,7 +32,7 @@ public class AuthorizationFilter implements Filter {
 
             User user = JwtUtil.verify(accessToken);
 
-            // 토큰을 다시 검증하기 번거로워서 임시로 세션에 넣어둔 것!
+            // 토큰을 다시 검증하기 귀찮아서, 임시로 세션에 넣어둔거다.
             HttpSession session = request.getSession();
             session.setAttribute("sessionUser", user);
 
@@ -51,7 +51,7 @@ public class AuthorizationFilter implements Filter {
 
     private void exResponse(HttpServletResponse response, String msg) throws IOException {
         response.setContentType("application/json;charset=utf-8");
-        response.setStatus(401); // 없으면 default로 200이 간다. restApi는 상태코드 정확하게 줘야 됨!
+        response.setStatus(401);
         PrintWriter out = response.getWriter();
 
         Resp<?> resp = Resp.fail(401, msg);

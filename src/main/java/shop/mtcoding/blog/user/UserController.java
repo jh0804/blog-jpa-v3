@@ -1,57 +1,50 @@
 package shop.mtcoding.blog.user;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.blog._core.util.Resp;
 
 import java.util.Map;
 
-// TODO : 미완
 @RequiredArgsConstructor
-@Controller
+@RestController // json만 리턴!!
 public class UserController {
     private final UserService userService;
     private final HttpSession session;
 
-
     @PutMapping("/s/api/user")
     public String update(@Valid @RequestBody UserRequest.UpdateDTO updateDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        // TODO : JWT 이후에
+        // TODO: JWT 이후에
         User userPS = userService.회원정보수정(updateDTO, sessionUser.getId());
         session.setAttribute("sessionUser", userPS);
-        return "redirect:/"; // 변경된 토큰을 전달
+        return "redirect:/";
     }
 
     @GetMapping("/api/check-username-available/{username}")
-    public @ResponseBody Resp<?> checkUsernameAvailable(@PathVariable("username") String username) {
+    public ResponseEntity<?> checkUsernameAvailable(@PathVariable("username") String username) {
         Map<String, Object> dto = userService.유저네임중복체크(username);
         return Resp.ok(dto);
     }
 
     @PostMapping("/join")
-    public @ResponseBody Resp<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
+    public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO reqDTO, Errors errors) {
         UserResponse.DTO respDTO = userService.회원가입(reqDTO);
         return Resp.ok(respDTO);
     }
 
-    // TODO : JWT 이후에
+    // TODO: JWT 이후에
     @PostMapping("/login")
-    public @ResponseBody Resp<?> login(@Valid @RequestBody UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
-        UserResponse.TokenDTO respDTO = userService.로그인(loginDTO); // stateless 서버가 될 거니까 session에 안담는다
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
+        UserResponse.TokenDTO respDTO = userService.로그인(loginDTO);
         return Resp.ok(respDTO);
     }
 
-    // TODO : JWT 이후에
-    @GetMapping("/logout")
-    public String logout() {
-        session.invalidate();
-        return "redirect:/login-form";
-    }
+    // AccessToken만으로는 Logout 을 할 수 없다.
+
 }
