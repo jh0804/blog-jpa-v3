@@ -41,6 +41,5 @@ public class UserRequest {
         private String username;
         @Size(min = 4, max = 20)
         private String password;
-        private String rememberMe; // check되면 on, 안되면 null
     }
 }

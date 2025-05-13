@@ -70,7 +70,7 @@ public class BoardService {
                 .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
         Love love = loveRepository.findByUserIdAndBoardId(userId, id)
-                .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
+                .orElse(null);
 
         Long loveCount = loveRepository.findByBoardId(id);
 
