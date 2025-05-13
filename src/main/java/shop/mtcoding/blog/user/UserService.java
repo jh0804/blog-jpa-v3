@@ -65,14 +65,14 @@ public class UserService {
         return dto;
     }
 
-    // TODO : RestAPI 규칙3 : update된 데이터도 돌려줘야 함
+    // TODO : RestAPI 규칙3 : update된 데이터도 돌려줘야 함 (변경이 된 row를 돌려줘야 함)
     @Transactional
-    public User 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
+    public  UserResponse.DTO 회원정보수정(UserRequest.UpdateDTO updateDTO, Integer userId) {
 
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new ExceptionApi404("자원을 찾을 수 없습니다"));
 
         userPS.update(updateDTO.getPassword(), updateDTO.getEmail()); // 영속화된 객체의 상태변경
-        return userPS; // 리턴한 이유는 세션을 동기화해야해서!!
+        return new UserResponse.DTO(userPS); // 리턴한 이유는 세션을 동기화해야해서!!
     } // 더티체킹 -> 상태가 변경되면 update을 날려요!!
 }

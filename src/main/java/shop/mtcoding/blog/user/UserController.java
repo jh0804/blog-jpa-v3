@@ -18,18 +18,17 @@ public class UserController {
     private final HttpSession session;
 
     @PutMapping("/s/api/user")
-    public String update(@Valid @RequestBody UserRequest.UpdateDTO updateDTO, Errors errors) {
+    public ResponseEntity<?> update(@Valid @RequestBody UserRequest.UpdateDTO reqDTO, Errors errors) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         // TODO: JWT 이후에
-        User userPS = userService.회원정보수정(updateDTO, sessionUser.getId());
-        session.setAttribute("sessionUser", userPS);
-        return "redirect:/";
+        UserResponse.DTO respDTO = userService.회원정보수정(reqDTO, sessionUser.getId());
+        return Resp.ok(respDTO);
     }
 
     @GetMapping("/api/check-username-available/{username}")
     public ResponseEntity<?> checkUsernameAvailable(@PathVariable("username") String username) {
-        Map<String, Object> dto = userService.유저네임중복체크(username);
-        return Resp.ok(dto);
+        Map<String, Object> respDTO = userService.유저네임중복체크(username);
+        return Resp.ok(respDTO);
     }
 
     @PostMapping("/join")
