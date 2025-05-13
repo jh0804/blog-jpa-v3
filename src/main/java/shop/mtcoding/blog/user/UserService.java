@@ -23,15 +23,15 @@ public class UserService {
     // RestAPI 규칙1 : insert 요청시에 그 행을 dto에 담아서 리턴한다.
     @Transactional
     public UserResponse.DTO 회원가입(UserRequest.JoinDTO reqDTO) {
-        try {
-            String encPassword = BCrypt.hashpw(reqDTO.getPassword(), BCrypt.gensalt());
-            reqDTO.setPassword(encPassword);
+        String encPassword = BCrypt.hashpw(reqDTO.getPassword(), BCrypt.gensalt());
+        reqDTO.setPassword(encPassword);
 
-            User userPS = userRepository.save(reqDTO.toEntity());
-            return new UserResponse.DTO(userPS);
-        } catch (Exception e) {
-            throw new ExceptionApi400("잘못된 요청입니다");
-        }
+        Optional<User> userOP = userRepository.findByUsername(reqDTO.getUsername());
+        // 중복 체크를 했으면 불가능하므로 400
+        if(userOP.isPresent()) throw new ExceptionApi400("중복된 유저네임이 존재합니다.");
+
+        User userPS = userRepository.save(reqDTO.toEntity());
+        return new UserResponse.DTO(userPS);
     }
 
     // TODO : A4용지에다가 id, username 적어, A4용지를 서명, A4용지를 돌려주기
@@ -47,6 +47,7 @@ public class UserService {
         String accessToken = JwtUtil.create(userPS);
         String refreshToken = JwtUtil.createRefresh(userPS);
 
+        // TODO : RestAPI 전환 끝난 뒤에 수업
         // DB에 Device 서명값(LoginDTO), IP(request), User-Agent(request), RefreshToken 저장(로그인할때 dto에서 하나를 더 받아야 됨)
 
         return UserResponse.TokenDTO.builder().accessToken(accessToken).refreshToken(refreshToken).build();
