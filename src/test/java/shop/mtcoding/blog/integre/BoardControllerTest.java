@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.integre;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -86,5 +87,61 @@ public class BoardControllerTest {
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.content").value("내용21"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.isPublic").value(true));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.userId").value(1));
+    }
+
+    @Test
+    public void list_test() throws Exception {
+        // given (쿼리 스트링도 given이 된다.
+        String page = "1";
+        String keyword = "제목1";
+
+        // String requestBody = om.writeValueAsString(reqDTO); -> json 변환이 없으니까 지운다.
+        // System.out.println(requestBody);
+
+        // when (테스트 실행)
+        // 토큰 여기서 만들어야 된다.
+//        User ssar = User.builder().id(1).username("ssar").build();
+//        String accessToken = JwtUtil.create(ssar); // 여기 User 객체 들어가야 됨 -> 위에서 만든다.
+        // accessToken을 헤더에 전달하면 된다.
+
+        ResultActions actions = mvc.perform(
+                MockMvcRequestBuilders
+                        .get("/")
+                        .param("keyword", keyword)
+                        .param("page", page)
+                // .get("/?keyword=''&page=0")
+//                        .content(requestBody) -> 얘들도 안필요함
+//                        .contentType(MediaType.APPLICATION_JSON) -> 얘들도 안필요함
+//                        .header("Authorization", "Bearer " + accessToken) -> 얘들도 안필요함
+        );
+
+        // eye (결과 눈으로 검증)
+        String responseBody = actions.andReturn().getResponse().getContentAsString();
+        System.out.println(responseBody);
+
+        // then (결과 코드로 검증) -> 이 코드가 나중에 테스트 서버에서 돌거고 테스트가 안되면 빨간색이 터져야 되므로
+        // 1. java 객체로 변경해서 검증 -> 귀찮
+        // 2. json 데이터 직접 검증 기능 제공
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
+
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.boards[0].id").value(16));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.boards[0].title").value("제목16"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.boards[0].content").value("내용16"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.boards[0].isPublic").value(true));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.boards[0].userId").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.boards[0].createdAt")
+                .value(Matchers.matchesPattern("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d+$")));
+
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.prev").value(0));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.next").value(2));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.current").value(1));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.size").value(3));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.totalCount").value(11));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.totalPage").value(4));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.isFirst").value(false));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.isLast").value(false));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.keyword").value("제목1"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.numbers", Matchers.hasSize(4)));
     }
 }
