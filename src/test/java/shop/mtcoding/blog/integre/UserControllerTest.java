@@ -24,6 +24,19 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mvc; // 가짜 환경을 때리는 클래스
 
+    // 나머지 메서드도 전부 테스트 
+
+    @Test
+    public void login_test() throws Exception {
+        // given
+
+        // when
+
+        // eye
+
+        // then
+    }
+
     @Test
     public void join_test() throws Exception {
         // given (가짜데이터)
