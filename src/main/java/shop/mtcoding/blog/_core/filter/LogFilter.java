@@ -3,10 +3,12 @@ package shop.mtcoding.blog._core.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import shop.mtcoding.blog.user.UserRepository;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class LogFilter implements Filter {
 
@@ -20,7 +22,11 @@ public class LogFilter implements Filter {
         String ip = req.getRemoteAddr();
         String userAgent = req.getHeader("User-Agent");
 
-        System.out.printf("[로그] %s | IP: %s | UA: %s\n", uri, ip, userAgent);
+        String msg = "[로그] ${uri} | IP: ${ip} | UA: ${ua}\n"
+                .replace("${uri}", uri)
+                .replace("${ip}", ip)
+                .replace("${ua}", userAgent);
+        log.info(msg);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

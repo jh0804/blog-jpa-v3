@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'shop.mtcoding'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 
 java {
 	sourceCompatibility = '21'
@@ -40,4 +40,9 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// plain 파일 생성하지 않기
+jar {
+	enabled = false
 }
