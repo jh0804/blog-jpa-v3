@@ -14,11 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog.user.User;
 import shop.mtcoding.blog.user.UserRequest;
 
+@Transactional
 @AutoConfigureMockMvc // MockMvc 클래스가 IoC로드
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class UserControllerTest {

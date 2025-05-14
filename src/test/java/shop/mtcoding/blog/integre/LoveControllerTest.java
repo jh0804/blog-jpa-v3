@@ -13,11 +13,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog.love.LoveRequest;
 import shop.mtcoding.blog.reply.ReplyRequest;
 import shop.mtcoding.blog.user.User;
 
+@Transactional
 @AutoConfigureMockMvc // MockMvc 클래스가 IoC로드
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class LoveControllerTest {

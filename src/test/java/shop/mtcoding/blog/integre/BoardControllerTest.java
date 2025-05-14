@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.integre;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,16 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 import shop.mtcoding.blog._core.util.JwtUtil;
 import shop.mtcoding.blog.board.BoardRequest;
 import shop.mtcoding.blog.user.User;
 import shop.mtcoding.blog.user.UserRequest;
 
 // 배열은 0번지만 상태검사하면 됨
+@Transactional
 @AutoConfigureMockMvc // MockMvc 클래스가 IoC로드
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class BoardControllerTest {
@@ -28,6 +32,9 @@ public class BoardControllerTest {
 
     @Autowired
     private MockMvc mvc; // 가짜 환경을 때리는 클래스
+
+    @Autowired
+    private EntityManager em;
 
     private String accessToken;
 
@@ -118,7 +125,7 @@ public class BoardControllerTest {
     @Test
     public void getBoardDetail_test() throws Exception {
         // given
-        Integer boardId = 1;
+        Integer boardId = 4;
 
         // when
         ResultActions actions = mvc.perform(
@@ -128,25 +135,26 @@ public class BoardControllerTest {
 
         // eye
         String responseBody = actions.andReturn().getResponse().getContentAsString();
-        // System.out.println(responseBody);
+        System.out.println(responseBody);
 
         // then
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.status").value(200));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.msg").value("성공"));
-
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(1));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("제목1"));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.content").value("내용1"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.id").value(4));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.title").value("제목4"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.content").value("내용4"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.isPublic").value(true));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.isOwner").value(false));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.isLove").value(false));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.loveCount").value(0));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.username").value("ssar"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.loveCount").value(2));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.username").value("love"));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.createdAt")
                 .value(Matchers.matchesPattern("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+\\+\\d{2}:\\d{2}$")));
         actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.loveId").value(Matchers.nullValue()));
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.replies").isArray());
-        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.replies", Matchers.hasSize(0)));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.replies[0].id").value(3));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.replies[0].content").value("댓글3"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.replies[0].username").value("ssar"));
+        actions.andExpect(MockMvcResultMatchers.jsonPath("$.body.replies[0].isOwner").value(false));
     }
 
     @Test
