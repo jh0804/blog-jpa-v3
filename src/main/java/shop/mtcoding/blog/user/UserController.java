@@ -11,6 +11,7 @@ import shop.mtcoding.blog._core.util.Resp;
 
 import java.util.Map;
 
+@CrossOrigin
 @RequiredArgsConstructor
 @RestController // json만 리턴!!
 public class UserController {
