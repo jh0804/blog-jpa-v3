@@ -1,0 +1,115 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+:user: user-controller-test
+:board: board-controller-test
+:reply: reply-controller-test
+:love: love-controller-test
+
+= REST API
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 회원
+=== 1. 회원가입 유저네임 중복 실패
+===== Request Example
+include::{snippets}/{user}/join_username_uk_fail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/join_username_uk_fail_test/http-response.adoc[]
+
+=== 2. 회원가입
+===== Request Example
+include::{snippets}/{user}/join_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/join_test/http-response.adoc[]
+
+=== 3. 로그인
+===== Request Example
+include::{snippets}/{user}/login_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/login_test/http-response.adoc[]
+
+=== 4. 회원정보수정
+===== Request Example
+include::{snippets}/{user}/update_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/update_test/http-response.adoc[]
+
+=== 5. 유저네임중복확인
+===== Request Example
+include::{snippets}/{user}/check_username_available_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{user}/check_username_available_test/http-response.adoc[]
+
+== 게시글
+=== 1. 게시글등록
+===== Request Example
+include::{snippets}/{board}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/list_test/http-response.adoc[]
+
+=== 2. 게시글수정
+===== Request Example
+include::{snippets}/{board}/update_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/update_test/http-response.adoc[]
+
+=== 3. 게시글보기
+===== Request Example
+include::{snippets}/{board}/getBoardOne_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/getBoardOne_test/http-response.adoc[]
+
+=== 4. 게시글상세보기
+===== Request Example
+include::{snippets}/{board}/getBoardDetail_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/getBoardDetail_test/http-response.adoc[]
+
+=== 5. 게시글목록보기
+===== Request Example
+include::{snippets}/{board}/list_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{board}/list_test/http-response.adoc[]
+
+== 좋아요
+=== 1. 좋아요등록
+===== Request Example
+include::{snippets}/{love}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{love}/save_test/http-response.adoc[]
+
+=== 2. 좋아요취소
+===== Request Example
+include::{snippets}/{love}/delete_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{love}/delete_test/http-response.adoc[]
+
+== 댓글
+=== 1. 댓글등록
+===== Request Example
+include::{snippets}/{reply}/save_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{reply}/save_test/http-response.adoc[]
+
+=== 2. 댓글취소
+===== Request Example
+include::{snippets}/{reply}/delete_test/http-request.adoc[]
+
+===== Response Example
+include::{snippets}/{reply}/delete_test/http-response.adoc[]

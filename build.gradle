@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	// 1. 문서만들기
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'shop.mtcoding'
@@ -22,7 +24,9 @@ repositories {
 }
 
 dependencies {
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	// 2. 문서만들기
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.3.0'
@@ -38,8 +42,38 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+// 3. 문서만들기
+
+// 1. gradlew build (test코드 실행 -> 결과 build/generated-snippets에 copy된다. *.adoc) -> 변수 설정
+// 서버 실행: build는 되지만 test 안됨 -> X
+// 메서드 개수만큼 생성됨?
+// 얘는 설정
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
+// 2. gradlew build (test코드 실행 -> 진짜로 1번의 결과가 실행됨)
+// 여기서 진짜 실행
 tasks.named('test') {
+	outputs.dir snippetsDir
 	useJUnitPlatform()
+}
+
+// 3. 테스트가 종료되면 asciidoctor 실행 -> *.adoc을 가지고 하나의 .adoc 파일로 변경 (src/docs/asciidoc)
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test // test가 실행되고 나서 실행됨 - 의존
+}
+
+// 4. HTML 파일을 서버에서 열어볼 수 있게 copy
+tasks.register('copyRestDocs', Copy) {
+	dependsOn tasks.named('asciidoctor')
+	from "${asciidoctor.outputDir}"  // asciidoctor 결과 위치
+	into "src/main/resources/static/docs" // /static/docs로 복사!
+}
+
+tasks.named('bootJar') {
+	dependsOn tasks.named('copyRestDocs')
 }
 
 // plain 파일 생성하지 않기
