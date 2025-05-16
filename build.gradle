@@ -22,7 +22,8 @@ repositories {
 }
 
 dependencies {
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.3.0'

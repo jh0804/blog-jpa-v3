@@ -21,6 +21,7 @@ public class LogFilter implements Filter {
         String uri = req.getRequestURI();
         String ip = req.getRemoteAddr();
         String userAgent = req.getHeader("User-Agent");
+        userAgent = userAgent == null ? "" : userAgent;
 
         String msg = "[로그] ${uri} | IP: ${ip} | UA: ${ua}\n"
                 .replace("${uri}", uri)
